@@ -32,7 +32,7 @@ public class Device {
     private String carrier;
 
     @Column(name = "FIRMWARE")
-    private Integer firmware;
+    private String firmware;
 
     @Column(name = "START_DATE")
     private Timestamp startDate;

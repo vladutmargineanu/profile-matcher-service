@@ -28,8 +28,8 @@ public class Item {
     private Integer quantity;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "IVENTORY", referencedColumnName = "ID_IVENTORY")
-    private Inventory iventory;
+    @JoinColumn(name = "INVENTORY", referencedColumnName = "ID_INVENTORY")
+    private Inventory inventory;
 
     @Column(name = "START_DATE")
     private Timestamp startDate;

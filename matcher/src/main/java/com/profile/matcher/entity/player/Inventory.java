@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
@@ -26,13 +27,12 @@ public class Inventory {
     private Player player;
 
     @Column(name = "CASH")
-    private Integer cash;
+    private BigDecimal cash;
 
     @Column(name = "COINS")
-    private Integer coins;
+    private BigDecimal coins;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "ITEM", referencedColumnName = "ID_ITEM")
+    @OneToMany(mappedBy = "inventory", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private List<Item> item;
 
     @Column(name = "START_DATE")

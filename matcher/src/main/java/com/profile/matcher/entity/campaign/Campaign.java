@@ -33,7 +33,7 @@ public class Campaign {
     private String name;
 
     @NotNull
-    @Column
+    @Column(name = "ENABLED")
     private Boolean enabled;
 
     @ManyToMany(fetch = FetchType.LAZY,

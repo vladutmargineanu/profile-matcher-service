@@ -11,6 +11,7 @@ import lombok.ToString;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -20,9 +21,9 @@ import java.util.List;
 @Table(name = "PLAYER", schema = "matcherapplication")
 public class Player {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_PLAYER")
-    private Long idPlayer;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "ID_PLAYER", columnDefinition = "BINARY(16)")
+    private UUID idPlayer;
 
     @NotNull
     @Column(name = "CREDENTIAL")
@@ -67,7 +68,7 @@ public class Player {
     private Integer xp;
 
     @Column(name = "TOTAL_PLAYTIME")
-    private Integer totalPlaytime;
+    private BigDecimal totalPlaytime;
 
     @Column(name = "COUNTRY")
     private String country;
