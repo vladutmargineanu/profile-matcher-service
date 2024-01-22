@@ -33,7 +33,7 @@ public class Inventory {
     private BigDecimal coins;
 
     @OneToMany(mappedBy = "inventory", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    private List<Item> item;
+    private List<Item> items;
 
     @Column(name = "START_DATE")
     private Timestamp startDate;

@@ -1,12 +1,12 @@
 package com.profile.matcher.arhitecture;
 
 public abstract class BaseCommand<T> extends BaseLogging {
-    protected boolean shouldExecute() {
+    protected boolean canExecute() {
         return true;
     }
 
     public T execute() {
-        if (shouldExecute()) {
+        if (canExecute()) {
             return doExecute();
         }
 

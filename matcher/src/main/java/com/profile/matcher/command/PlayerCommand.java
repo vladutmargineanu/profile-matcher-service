@@ -8,17 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @Scope("prototype")
 @RequiredArgsConstructor
-public class PlayerCommand extends BaseCommand<Player> {
+public class PlayerCommand extends BaseCommand<Optional<Player>> {
     @Autowired
     private PlayerService playerService;
 
     private final String idPlayer;
 
     @Override
-    public Player doExecute() {
+    public Optional<Player> doExecute() {
         writeLog("PlayerCommand.doExecute() - command IN with idPlayer: {}", idPlayer);
         return this.playerService.getPlayerDetails(idPlayer);
     }

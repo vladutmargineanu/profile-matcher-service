@@ -2,36 +2,39 @@ package com.profile.matcher.service;
 
 import com.profile.matcher.arhitecture.BaseService;
 import com.profile.matcher.dto.campaign.CampaignDto;
+import com.profile.matcher.entity.campaign.Campaign;
+import com.profile.matcher.entity.player.Player;
+import com.profile.matcher.repository.CampaignRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CampaignService extends BaseService {
     @Value("${campaign.api.url}")
     private String campaignApiUrl;
 
-    private final RestTemplate restTemplate;
-
-
-    public CampaignService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-
+    @Autowired
+    private CampaignRepository campaignRepository;
 
     /**
      * @return
      */
     public List<CampaignDto> getCurrentCampaignsRealService() {
-        writeLog("CampaignService.getCurrentCampaignsRealService IN");
+        writeLog("CampaignService.getCurrentCampaignsRealService() IN");
 
+        final RestTemplate restTemplate = new RestTemplate();
         List<CampaignDto> campaignDtoList = new ArrayList<>();
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -46,10 +49,10 @@ public class CampaignService extends BaseService {
                     }
             );
             campaignDtoList = response.getBody();
-            writeLog("CampaignService.getCurrentCampaignsRealService get current campaign: {}", campaignDtoList);
+            writeLog("CampaignService.getCurrentCampaignsRealService() get current campaigns: {}", campaignDtoList);
             return campaignDtoList;
         } catch (Exception e) {
-            writeLog("Error getting current campaign - exception: {}", e.getMessage());
+            writeLog("Error getting current campaigns - exception: {}", e.getMessage());
         }
         return campaignDtoList;
     }
@@ -57,8 +60,8 @@ public class CampaignService extends BaseService {
     /**
      * @return
      */
-    public List<CampaignDto> getCurrentCampaignMockedService() {
-        writeLog("CampaignService.getCurrentCampaignMockedService IN");
+    public List<CampaignDto> getCurrentCampaignsMockedService() {
+        writeLog("CampaignService.getCurrentCampaignsMockedService() IN");
 
         CampaignDto campaign = new CampaignDto();
         campaign.setGame("mygame");
@@ -89,8 +92,34 @@ public class CampaignService extends BaseService {
         campaign.setLast_updated("2021-07-13 11:46:58Z");
         List<CampaignDto> campaignDtoList = Collections.singletonList(campaign);
 
-        writeLog("CampaignService.getCurrentCampaignMockedService current campaign: {}", campaignDtoList);
+        writeLog("CampaignService.getCurrentCampaignsMockedService() current campaigns: {}", campaignDtoList);
 
         return campaignDtoList;
+    }
+
+    /**
+     * @param campaignDto
+     * @param player
+     * @return
+     */
+    @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRES_NEW)
+    public Optional<Campaign> createCampaignEntity(CampaignDto campaignDto, Player player) {
+        if (null != campaignDto) {
+            writeLog("CampaignService.createCampaignEntity() entity from dto: {}", campaignDto);
+
+            Campaign campaign = new Campaign();
+            campaign.setGame(campaignDto.getGame());
+            campaign.setName(campaignDto.getName());
+            campaign.setPriority(campaignDto.getPriority());
+            campaign.setEnabled(campaignDto.getEnabled());
+            campaign.getPlayers().add(player);
+            campaignRepository.save(campaign);
+
+            writeLog("CampaignService.createCampaignEntity() campaign entity created: {}", campaign);
+
+            return Optional.of(campaign);
+        }
+
+        return Optional.empty();
     }
 }
