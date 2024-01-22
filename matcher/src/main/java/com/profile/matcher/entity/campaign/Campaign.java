@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
@@ -31,6 +32,9 @@ public class Campaign {
     @NotNull
     @Column(name = "NAME")
     private String name;
+
+    @Column(name = "priority")
+    private BigDecimal priority;
 
     @NotNull
     @Column(name = "ENABLED")
