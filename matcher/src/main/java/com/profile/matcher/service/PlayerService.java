@@ -71,7 +71,7 @@ public class PlayerService extends BaseService {
     public static boolean checkNewCampaignForPlayer(Player player, CampaignDto campaignDto) {
         return player.getCampaigns()
                 .stream()
-                .anyMatch(campaign -> campaign.getName().equals(campaignDto.getName()));
+                .noneMatch(campaign -> campaign.getName().equals(campaignDto.getName()));
     }
 
     /**
