@@ -4,8 +4,12 @@ import com.profile.matcher.arhitecture.BaseService;
 import com.profile.matcher.dto.campaign.CampaignDto;
 import com.profile.matcher.entity.player.Item;
 import com.profile.matcher.entity.player.Player;
+import com.profile.matcher.exception.FindCurrentCampaignException;
+import com.profile.matcher.exception.FindPlayerDetailsException;
+import com.profile.matcher.exception.UpdatePlayerDetailsException;
 import com.profile.matcher.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +19,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiPredicate;
+
+import static com.profile.matcher.utils.Constants.ErrorCode.ERROR_CURRENT_CAMPAIGN;
+import static com.profile.matcher.utils.Constants.ErrorCode.ERROR_PLAYER_DETAIL;
 
 @Service
 public class PlayerService extends BaseService {
@@ -28,11 +35,18 @@ public class PlayerService extends BaseService {
      * @param idPlayer
      * @return
      */
-    @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = {Exception.class, UpdatePlayerDetailsException.class}, propagation = Propagation.REQUIRED)
     public Optional<Player> getPlayerDetails(String idPlayer) {
-        writeLog("PlayerService.getPlayerDetails() - get player by idPlayer: {}", idPlayer);
+        Optional<Player> optionalPlayer;
 
-        Optional<Player> optionalPlayer = playerRepository.findByIdPlayer(UUID.fromString(idPlayer));
+        try {
+            writeLog("PlayerService.getPlayerDetails() - get player by idPlayer: {}", idPlayer);
+            optionalPlayer = playerRepository.findByIdPlayer(UUID.fromString(idPlayer));
+        } catch (Exception e) {
+            writeLog("PlayerService.getPlayerDetails() - failed to retrieve player: {}", e.getMessage());
+            throw new FindPlayerDetailsException(e.getMessage(), ERROR_PLAYER_DETAIL, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
         if (optionalPlayer.isPresent()) {
             Player player = optionalPlayer.get();
             writeLog("PlayerService.getPlayerDetails() - player found: {}", player.getIdPlayer());
@@ -58,6 +72,7 @@ public class PlayerService extends BaseService {
             } catch (Exception e) {
                 writeLog("PlayerService.getPlayerDetails() - failed to retrieve current campaign: {}",
                         e.getMessage());
+                throw new FindCurrentCampaignException(e.getMessage(), ERROR_CURRENT_CAMPAIGN, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 

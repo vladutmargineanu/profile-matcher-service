@@ -6,6 +6,7 @@ import com.profile.matcher.command.PlayerCommand;
 import com.profile.matcher.dto.player.PlayerDto;
 import com.profile.matcher.entity.player.Player;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,11 +32,10 @@ public class PlayerController extends BaseController {
         if (playerOptional.isPresent()) {
             PlayerDto playerDto = playerAssembler.toResource(playerOptional.get());
             writeLog("PlayerController.getClientConfig() - player found: {}", playerDto);
-
             return ResponseEntity.ok(playerDto);
         } else {
             writeLog("PlayerController.getClientConfig() - player not found");
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).headers(HttpHeaders.EMPTY).build();
         }
     }
 
