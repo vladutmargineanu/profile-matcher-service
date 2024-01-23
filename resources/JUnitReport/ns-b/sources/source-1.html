@@ -1,0 +1,253 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > CampaignService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.profile.matcher.service</a>
+</div>
+
+<h1>Coverage Summary for Class: CampaignService (com.profile.matcher.service)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CampaignService</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    69.2%
+  </span>
+  <span class="absValue">
+    (36/52)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CampaignService$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (4/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    69.8%
+  </span>
+  <span class="absValue">
+    (37/53)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.profile.matcher.service;
+&nbsp;
+&nbsp;import com.profile.matcher.arhitecture.BaseService;
+&nbsp;import com.profile.matcher.dto.campaign.CampaignDto;
+&nbsp;import com.profile.matcher.entity.campaign.Campaign;
+&nbsp;import com.profile.matcher.entity.player.Player;
+&nbsp;import com.profile.matcher.repository.CampaignRepository;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.beans.factory.annotation.Value;
+&nbsp;import org.springframework.core.ParameterizedTypeReference;
+&nbsp;import org.springframework.http.*;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.web.client.RestTemplate;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;public class CampaignService extends BaseService {</b>
+&nbsp;    @Value(&quot;${campaign.api.url}&quot;)
+&nbsp;    private String campaignApiUrl;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private CampaignRepository campaignRepository;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return
+&nbsp;     */
+&nbsp;    public List&lt;CampaignDto&gt; getCurrentCampaignsRealService() {
+<b class="fc">&nbsp;        writeLog(&quot;CampaignService.getCurrentCampaignsRealService() IN&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        final RestTemplate restTemplate = new RestTemplate();</b>
+<b class="fc">&nbsp;        List&lt;CampaignDto&gt; campaignDtoList = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        final HttpHeaders headers = new HttpHeaders();</b>
+<b class="fc">&nbsp;        headers.setContentType(MediaType.APPLICATION_JSON);</b>
+<b class="fc">&nbsp;        HttpEntity&lt;String&gt; entity = new HttpEntity&lt;&gt;(headers);</b>
+&nbsp;
+&nbsp;        try {
+<b class="fc">&nbsp;            ResponseEntity&lt;List&lt;CampaignDto&gt;&gt; response = restTemplate.exchange(</b>
+&nbsp;                    campaignApiUrl,
+&nbsp;                    HttpMethod.GET,
+&nbsp;                    entity,
+<b class="fc">&nbsp;                    new ParameterizedTypeReference&lt;&gt;() {</b>
+&nbsp;                    }
+&nbsp;            );
+<b class="nc">&nbsp;            campaignDtoList = response.getBody();</b>
+<b class="nc">&nbsp;            writeLog(&quot;CampaignService.getCurrentCampaignsRealService() get current campaigns: {}&quot;, campaignDtoList);</b>
+<b class="nc">&nbsp;            return campaignDtoList;</b>
+<b class="fc">&nbsp;        } catch (Exception e) {</b>
+<b class="fc">&nbsp;            writeLog(&quot;Error getting current campaigns - exception: {}&quot;, e.getMessage());</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return campaignDtoList;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @return
+&nbsp;     */
+&nbsp;    public List&lt;CampaignDto&gt; getCurrentCampaignsMockedService() {
+<b class="fc">&nbsp;        writeLog(&quot;CampaignService.getCurrentCampaignsMockedService() IN&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        CampaignDto campaign = new CampaignDto();</b>
+<b class="fc">&nbsp;        campaign.setGame(&quot;mygame&quot;);</b>
+<b class="fc">&nbsp;        campaign.setName(&quot;mycampaign&quot;);</b>
+<b class="fc">&nbsp;        campaign.setPriority(BigDecimal.valueOf(10.5));</b>
+&nbsp;
+<b class="fc">&nbsp;        CampaignDto.Matchers.Range levelRange = new CampaignDto.Matchers.Range();</b>
+<b class="fc">&nbsp;        levelRange.setMin(1);</b>
+<b class="fc">&nbsp;        levelRange.setMax(3);</b>
+&nbsp;
+<b class="fc">&nbsp;        CampaignDto.Matchers.Has has = new CampaignDto.Matchers.Has();</b>
+<b class="fc">&nbsp;        has.setCountry(List.of(&quot;US&quot;, &quot;RO&quot;, &quot;CA&quot;));</b>
+<b class="fc">&nbsp;        has.setItems(List.of(&quot;item_1&quot;));</b>
+&nbsp;
+<b class="fc">&nbsp;        CampaignDto.Matchers.DoesNotHave doesNotHave = new CampaignDto.Matchers.DoesNotHave();</b>
+<b class="fc">&nbsp;        doesNotHave.setItems(List.of(&quot;item_4&quot;));</b>
+&nbsp;
+<b class="fc">&nbsp;        CampaignDto.Matchers matchers = new CampaignDto.Matchers();</b>
+<b class="fc">&nbsp;        matchers.setLevel(levelRange);</b>
+<b class="fc">&nbsp;        matchers.setHas(has);</b>
+<b class="fc">&nbsp;        matchers.setDoesNotHave(doesNotHave);</b>
+&nbsp;
+<b class="fc">&nbsp;        campaign.setMatchers(matchers);</b>
+&nbsp;
+<b class="fc">&nbsp;        campaign.setStart_date(&quot;2022-01-25 00:00:00Z&quot;);</b>
+<b class="fc">&nbsp;        campaign.setEnd_date(&quot;2022-02-25 00:00:00Z&quot;);</b>
+<b class="fc">&nbsp;        campaign.setEnabled(true);</b>
+<b class="fc">&nbsp;        campaign.setLast_updated(&quot;2021-07-13 11:46:58Z&quot;);</b>
+<b class="fc">&nbsp;        List&lt;CampaignDto&gt; campaignDtoList = Collections.singletonList(campaign);</b>
+&nbsp;
+<b class="fc">&nbsp;        writeLog(&quot;CampaignService.getCurrentCampaignsMockedService() current campaigns: {}&quot;, campaignDtoList);</b>
+&nbsp;
+<b class="fc">&nbsp;        return campaignDtoList;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @param campaignDto
+&nbsp;     * @param player
+&nbsp;     * @return
+&nbsp;     */
+&nbsp;    public Optional&lt;Campaign&gt; createCampaignEntity(CampaignDto campaignDto, Player player) {
+<b class="nc">&nbsp;        if (null != campaignDto) {</b>
+<b class="nc">&nbsp;            writeLog(&quot;CampaignService.createCampaignEntity() entity from dto: {}&quot;, campaignDto);</b>
+&nbsp;
+<b class="nc">&nbsp;            Campaign campaign = new Campaign();</b>
+<b class="nc">&nbsp;            campaign.setGame(campaignDto.getGame());</b>
+<b class="nc">&nbsp;            campaign.setName(campaignDto.getName());</b>
+<b class="nc">&nbsp;            campaign.setPriority(campaignDto.getPriority());</b>
+<b class="nc">&nbsp;            campaign.setEnabled(campaignDto.getEnabled());</b>
+<b class="nc">&nbsp;            List&lt;Player&gt; players = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;            players.add(player);</b>
+<b class="nc">&nbsp;            campaign.setPlayers(players);</b>
+&nbsp;
+<b class="nc">&nbsp;            writeLog(&quot;CampaignService.createCampaignEntity() campaign entity created: {}&quot;, campaign.getName());</b>
+&nbsp;
+<b class="nc">&nbsp;            return Optional.of(campaign);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return Optional.empty();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-01-23 19:53</div>
+</div>
+</body>
+</html>

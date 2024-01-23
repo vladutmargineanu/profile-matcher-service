@@ -1,0 +1,91 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > PlayerRepository</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.profile.matcher.repository</a>
+</div>
+
+<h1>Coverage Summary for Class: PlayerRepository (com.profile.matcher.repository)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">PlayerRepository$MockitoMock$N2ojyooS</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRepository$MockitoMock$N2ojyooS$auxiliary$cTnm7MOY</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRepository$MockitoMock$N2ojyooS$auxiliary$xbb5F4Ja</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.profile.matcher.repository;
+&nbsp;
+&nbsp;import com.profile.matcher.entity.player.Player;
+&nbsp;import org.springframework.data.jpa.repository.JpaRepository;
+&nbsp;import org.springframework.data.jpa.repository.Query;
+&nbsp;
+&nbsp;import java.util.Optional;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;public interface PlayerRepository extends JpaRepository&lt;Player, UUID&gt; {
+&nbsp;
+&nbsp;    // @Query(nativeQuery = true, value = &quot;SELECT * FROM PLAYER PL WHERE PL.ID_PLAYER = UUID_TO_BIN(?1)&quot;)
+&nbsp;    Optional&lt;Player&gt; findByIdPlayer(UUID idPlayer);
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-01-23 19:53</div>
+</div>
+</body>
+</html>

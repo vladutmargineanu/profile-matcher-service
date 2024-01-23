@@ -1,0 +1,146 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > PlayerController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.profile.matcher.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: PlayerController (com.profile.matcher.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PlayerController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.profile.matcher.controller;
+&nbsp;
+&nbsp;import com.profile.matcher.arhitecture.BaseController;
+&nbsp;import com.profile.matcher.assembler.PlayerAssembler;
+&nbsp;import com.profile.matcher.command.PlayerCommand;
+&nbsp;import com.profile.matcher.dto.player.PlayerDto;
+&nbsp;import com.profile.matcher.entity.player.Player;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.HttpHeaders;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.GetMapping;
+&nbsp;import org.springframework.web.bind.annotation.PathVariable;
+&nbsp;import org.springframework.web.bind.annotation.RestController;
+&nbsp;
+&nbsp;import java.util.Optional;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;@RestController
+<b class="fc">&nbsp;public class PlayerController extends BaseController {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private PlayerAssembler playerAssembler;
+&nbsp;
+&nbsp;    @GetMapping(&quot;/get_client_config/{player_id}&quot;)
+&nbsp;    public ResponseEntity&lt;PlayerDto&gt; getClientConfig(@PathVariable(&quot;player_id&quot;) String idPlayer) {
+<b class="fc">&nbsp;        writeLog(&quot;PlayerController.getClientConfig() - get player with id: {}&quot;, idPlayer);</b>
+&nbsp;
+<b class="fc">&nbsp;        PlayerCommand playerCommand = getCommand(PlayerCommand.class, idPlayer);</b>
+<b class="fc">&nbsp;        Optional&lt;Player&gt; playerOptional = playerCommand.execute();</b>
+&nbsp;
+<b class="fc">&nbsp;        if (playerOptional.isPresent()) {</b>
+<b class="fc">&nbsp;            PlayerDto playerDto = playerAssembler.toResource(playerOptional.get());</b>
+<b class="fc">&nbsp;            writeLog(&quot;PlayerController.getClientConfig() - player found: {}&quot;, playerDto);</b>
+<b class="fc">&nbsp;            return ResponseEntity.ok(playerDto);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            writeLog(&quot;PlayerController.getClientConfig() - player not found&quot;);</b>
+<b class="fc">&nbsp;            return ResponseEntity.status(HttpStatus.NO_CONTENT).headers(HttpHeaders.EMPTY).build();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-01-23 19:53</div>
+</div>
+</body>
+</html>

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -85,9 +86,12 @@ public class PlayerService extends BaseService {
      * @return
      */
     public static boolean checkNewCampaignForPlayer(Player player, CampaignDto campaignDto) {
-        return player.getCampaigns()
-                .stream()
-                .noneMatch(campaign -> campaign.getName().equals(campaignDto.getName()));
+        if (!CollectionUtils.isEmpty(player.getCampaigns())) {
+            return player.getCampaigns()
+                    .stream()
+                    .noneMatch(campaign -> campaign.getName().equals(campaignDto.getName()));
+        }
+        return true;
     }
 
     /**
@@ -111,40 +115,58 @@ public class PlayerService extends BaseService {
      *
      */
     private static final BiPredicate<Player, CampaignDto> matchLevel = (player, campaign) -> {
-        int playerLevel = player.getLevel();
-        int minLevel = campaign.getMatchers().getLevel().getMin();
-        int maxLevel = campaign.getMatchers().getLevel().getMax();
+        if (null != player.getLevel()) {
+            int playerLevel = player.getLevel();
+            ;
+            int minLevel = campaign.getMatchers() != null && campaign.getMatchers().getLevel() != null ?
+                    campaign.getMatchers().getLevel().getMin() : Integer.MAX_VALUE;
+            int maxLevel = campaign.getMatchers() != null && campaign.getMatchers().getLevel() != null ?
+                    campaign.getMatchers().getLevel().getMax() : Integer.MIN_VALUE;
 
-        return playerLevel >= minLevel && playerLevel <= maxLevel;
+            return playerLevel >= minLevel && playerLevel <= maxLevel;
+        }
+        return false;
     };
 
     /**
      *
      */
     private static final BiPredicate<Player, CampaignDto> matchCountry = (player, campaign) -> {
-        String playerCountry = player.getCountry();
-        List<String> campaignCountries = campaign.getMatchers().getHas().getCountry();
+        if (null != player.getCountry()) {
+            String playerCountry = player.getCountry();
+            List<String> campaignCountries = null != campaign.getMatchers() && null != campaign.getMatchers().getHas() ?
+                    campaign.getMatchers().getHas().getCountry() : Collections.emptyList();
 
-        return campaignCountries.contains(playerCountry);
+            return campaignCountries.contains(playerCountry);
+        }
+        return false;
     };
 
     /**
      *
      */
     private static final BiPredicate<Player, CampaignDto> matchItems = (player, campaign) -> {
-        List<Item> playerItems = player.getInventory().getItems();
-        List<String> campaignItems = campaign.getMatchers().getHas().getItems();
+        if (null != player.getInventory() && !CollectionUtils.isEmpty(player.getInventory().getItems())) {
+            List<Item> playerItems = player.getInventory().getItems();
+            List<String> campaignItems = null != campaign.getMatchers() && null != campaign.getMatchers().getHas() ?
+                    campaign.getMatchers().getHas().getItems() : Collections.emptyList();
 
-        return playerItems.stream().map(Item::getName).anyMatch(campaignItems::contains);
+            return playerItems.stream().map(Item::getName).anyMatch(campaignItems::contains);
+        }
+        return false;
     };
 
     /**
      *
      */
     private static final BiPredicate<Player, CampaignDto> matchDoesNotHaveItems = (player, campaign) -> {
-        List<Item> playerItems = player.getInventory().getItems();
-        List<String> campaignDoesNotHaveItems = campaign.getMatchers().getDoesNotHave().getItems();
+        if (null != player.getInventory() && !CollectionUtils.isEmpty(player.getInventory().getItems())) {
+            List<Item> playerItems = player.getInventory().getItems();
+            List<String> campaignDoesNotHaveItems = null != campaign.getMatchers() && null != campaign.getMatchers().getDoesNotHave() ?
+                    campaign.getMatchers().getDoesNotHave().getItems() : Collections.emptyList();
 
-        return playerItems.stream().map(Item::getName).noneMatch(campaignDoesNotHaveItems::contains);
+            return playerItems.stream().map(Item::getName).noneMatch(campaignDoesNotHaveItems::contains);
+        }
+        return false;
     };
 }

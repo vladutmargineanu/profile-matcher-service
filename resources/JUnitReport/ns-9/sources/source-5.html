@@ -1,0 +1,215 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Player</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.profile.matcher.entity.player</a>
+</div>
+
+<h1>Coverage Summary for Class: Player (com.profile.matcher.entity.player)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Player</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.8%
+  </span>
+  <span class="absValue">
+    (23/24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.8%
+  </span>
+  <span class="absValue">
+    (23/24)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Player$HibernateInstantiator$9Sfq3NWK</td>
+  </tr>
+  <tr>
+    <td class="name">Player$HibernateProxy$qfeoUl7F</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    95.8%
+  </span>
+  <span class="absValue">
+    (23/24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.8%
+  </span>
+  <span class="absValue">
+    (23/24)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.profile.matcher.entity.player;
+&nbsp;
+&nbsp;import com.profile.matcher.entity.campaign.Campaign;
+&nbsp;import jakarta.persistence.*;
+&nbsp;import jakarta.validation.constraints.NotNull;
+&nbsp;import lombok.Getter;
+&nbsp;import lombok.NoArgsConstructor;
+&nbsp;import lombok.Setter;
+&nbsp;import lombok.ToString;
+&nbsp;import org.hibernate.annotations.JdbcTypeCode;
+&nbsp;import org.hibernate.type.SqlTypes;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.sql.Timestamp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;@Getter
+<b class="fc">&nbsp;@Setter</b>
+<b class="nc">&nbsp;@ToString</b>
+<b class="fc">&nbsp;@NoArgsConstructor</b>
+&nbsp;@Entity
+&nbsp;@Table(name = &quot;PLAYER&quot;, schema = &quot;matcherapplication&quot;)
+&nbsp;public class Player {
+&nbsp;    @Id
+&nbsp;    @GeneratedValue(strategy = GenerationType.UUID)
+&nbsp;    @Column(name = &quot;ID_PLAYER&quot;, columnDefinition = &quot;BINARY(16)&quot;)
+&nbsp;    @JdbcTypeCode(SqlTypes.BINARY)
+<b class="fc">&nbsp;    private UUID idPlayer;</b>
+&nbsp;
+&nbsp;    @NotNull
+&nbsp;    @Column(name = &quot;CREDENTIAL&quot;)
+<b class="fc">&nbsp;    private String credential;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;CREATED&quot;)
+<b class="fc">&nbsp;    private Timestamp created;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;MODIFIED&quot;)
+<b class="fc">&nbsp;    private Timestamp modified;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;LAST_SESSION&quot;)
+<b class="fc">&nbsp;    private Timestamp lastSession;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;TOTAL_SPENT&quot;)
+<b class="fc">&nbsp;    private BigDecimal totalSpent;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;TOTAL_REFUND&quot;)
+<b class="fc">&nbsp;    private BigDecimal totalRefund;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;TOTAL_TRANSACTIONS&quot;)
+<b class="fc">&nbsp;    private Integer totalTransactions;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;LAST_PURCHASE&quot;)
+<b class="fc">&nbsp;    private Timestamp lastPurchase;</b>
+&nbsp;
+&nbsp;    @ManyToMany(fetch = FetchType.LAZY,
+&nbsp;            cascade = {CascadeType.REFRESH, CascadeType.MERGE})
+&nbsp;    @JoinTable(
+&nbsp;            name = &quot;CAMPAIGN_PLAYER&quot;,
+&nbsp;            joinColumns = @JoinColumn(name = &quot;ID_PLAYER&quot;),
+&nbsp;            inverseJoinColumns = @JoinColumn(name = &quot;ID_CAMPAIGN&quot;))
+<b class="fc">&nbsp;    private List&lt;Campaign&gt; campaigns;</b>
+&nbsp;
+&nbsp;    @OneToMany(mappedBy = &quot;player&quot;, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+<b class="fc">&nbsp;    private List&lt;Device&gt; devices;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;LEVEL&quot;)
+<b class="fc">&nbsp;    private Integer level;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;XP&quot;)
+<b class="fc">&nbsp;    private Integer xp;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;TOTAL_PLAYTIME&quot;)
+<b class="fc">&nbsp;    private BigDecimal totalPlaytime;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;COUNTRY&quot;)
+<b class="fc">&nbsp;    private String country;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;LANGUAGE&quot;)
+<b class="fc">&nbsp;    private String language;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;BIRTHDATE&quot;)
+<b class="fc">&nbsp;    private Timestamp birthdate;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;GENDER&quot;)
+<b class="fc">&nbsp;    private String gender;</b>
+&nbsp;
+&nbsp;    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+&nbsp;    @JoinColumn(name = &quot;INVENTORY&quot;, referencedColumnName = &quot;ID_INVENTORY&quot;)
+<b class="fc">&nbsp;    private Inventory inventory;</b>
+&nbsp;
+&nbsp;    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+&nbsp;    @JoinColumn(name = &quot;CLAN&quot;, referencedColumnName = &quot;ID_CLAN&quot;)
+<b class="fc">&nbsp;    private Clan clan;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;CUSTOM_FIELD&quot;)
+<b class="fc">&nbsp;    private String customField;</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-01-23 19:53</div>
+</div>
+</body>
+</html>

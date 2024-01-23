@@ -1,0 +1,166 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Inventory</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.profile.matcher.entity.player</a>
+</div>
+
+<h1>Coverage Summary for Class: Inventory (com.profile.matcher.entity.player)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Inventory</td>
+<td class="coverageStat">
+  <span class="percent">
+    27.3%
+  </span>
+  <span class="absValue">
+    (3/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    27.3%
+  </span>
+  <span class="absValue">
+    (3/11)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Inventory$HibernateInstantiator$a6nEA7wL</td>
+  </tr>
+  <tr>
+    <td class="name">Inventory$HibernateProxy$AItVGoYh</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    27.3%
+  </span>
+  <span class="absValue">
+    (3/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    27.3%
+  </span>
+  <span class="absValue">
+    (3/11)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.profile.matcher.entity.player;
+&nbsp;
+&nbsp;import jakarta.persistence.*;
+&nbsp;import lombok.Getter;
+&nbsp;import lombok.NoArgsConstructor;
+&nbsp;import lombok.Setter;
+&nbsp;import lombok.ToString;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.sql.Timestamp;
+&nbsp;import java.time.Instant;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Getter
+<b class="fc">&nbsp;@Setter</b>
+<b class="nc">&nbsp;@ToString</b>
+<b class="fc">&nbsp;@NoArgsConstructor</b>
+&nbsp;@Entity
+&nbsp;@Table(name = &quot;INVENTORY&quot;, schema = &quot;matcherapplication&quot;)
+&nbsp;public class Inventory {
+&nbsp;    @Id
+&nbsp;    @GeneratedValue(strategy = GenerationType.IDENTITY)
+&nbsp;    @Column(name = &quot;ID_INVENTORY&quot;)
+<b class="nc">&nbsp;    private Long idInventory;</b>
+&nbsp;
+&nbsp;    @OneToOne(mappedBy = &quot;inventory&quot;, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+<b class="nc">&nbsp;    private Player player;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;CASH&quot;)
+<b class="nc">&nbsp;    private BigDecimal cash;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;COINS&quot;)
+<b class="nc">&nbsp;    private BigDecimal coins;</b>
+&nbsp;
+&nbsp;    @OneToMany(mappedBy = &quot;inventory&quot;, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+<b class="fc">&nbsp;    private List&lt;Item&gt; items;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;START_DATE&quot;)
+<b class="nc">&nbsp;    private Timestamp startDate;</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;END_DATE&quot;)
+<b class="nc">&nbsp;    private Timestamp endDate;</b>
+&nbsp;
+&nbsp;    @PrePersist
+&nbsp;    public void setStartDate() {
+<b class="nc">&nbsp;        this.setStartDate(Timestamp.from(Instant.now()));</b>
+&nbsp;    }
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-01-23 19:53</div>
+</div>
+</body>
+</html>

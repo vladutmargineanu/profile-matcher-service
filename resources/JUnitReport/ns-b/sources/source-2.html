@@ -1,0 +1,286 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > PlayerService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.profile.matcher.service</a>
+</div>
+
+<h1>Coverage Summary for Class: PlayerService (com.profile.matcher.service)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PlayerService</td>
+<td class="coverageStat">
+  <span class="percent">
+    90.9%
+  </span>
+  <span class="absValue">
+    (10/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82.5%
+  </span>
+  <span class="absValue">
+    (52/63)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">PlayerService$$SpringCGLIB$$0</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    90.9%
+  </span>
+  <span class="absValue">
+    (10/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82.5%
+  </span>
+  <span class="absValue">
+    (52/63)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.profile.matcher.service;
+&nbsp;
+&nbsp;import com.profile.matcher.arhitecture.BaseService;
+&nbsp;import com.profile.matcher.dto.campaign.CampaignDto;
+&nbsp;import com.profile.matcher.entity.player.Item;
+&nbsp;import com.profile.matcher.entity.player.Player;
+&nbsp;import com.profile.matcher.exception.FindCurrentCampaignException;
+&nbsp;import com.profile.matcher.exception.FindPlayerDetailsException;
+&nbsp;import com.profile.matcher.exception.UpdatePlayerDetailsException;
+&nbsp;import com.profile.matcher.repository.PlayerRepository;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Propagation;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;import org.springframework.util.CollectionUtils;
+&nbsp;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;import java.util.UUID;
+&nbsp;import java.util.function.BiPredicate;
+&nbsp;
+&nbsp;import static com.profile.matcher.utils.Constants.ErrorCode.ERROR_CURRENT_CAMPAIGN;
+&nbsp;import static com.profile.matcher.utils.Constants.ErrorCode.ERROR_PLAYER_DETAIL;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;public class PlayerService extends BaseService {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private CampaignService campaignService;
+&nbsp;    @Autowired
+&nbsp;    private PlayerRepository playerRepository;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @param idPlayer
+&nbsp;     * @return
+&nbsp;     */
+&nbsp;    @Transactional(rollbackFor = {Exception.class, UpdatePlayerDetailsException.class}, propagation = Propagation.REQUIRED)
+&nbsp;    public Optional&lt;Player&gt; getPlayerDetails(String idPlayer) {
+&nbsp;        Optional&lt;Player&gt; optionalPlayer;
+&nbsp;
+&nbsp;        try {
+<b class="fc">&nbsp;            writeLog(&quot;PlayerService.getPlayerDetails() - get player by idPlayer: {}&quot;, idPlayer);</b>
+<b class="fc">&nbsp;            optionalPlayer = playerRepository.findByIdPlayer(UUID.fromString(idPlayer));</b>
+<b class="fc">&nbsp;        } catch (Exception e) {</b>
+<b class="fc">&nbsp;            writeLog(&quot;PlayerService.getPlayerDetails() - failed to retrieve player: {}&quot;, e.getMessage());</b>
+<b class="fc">&nbsp;            throw new FindPlayerDetailsException(e.getMessage(), ERROR_PLAYER_DETAIL, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        if (optionalPlayer.isPresent()) {</b>
+<b class="fc">&nbsp;            Player player = optionalPlayer.get();</b>
+<b class="fc">&nbsp;            writeLog(&quot;PlayerService.getPlayerDetails() - player found: {}&quot;, player.getIdPlayer());</b>
+&nbsp;
+&nbsp;            try {
+<b class="fc">&nbsp;                List&lt;CampaignDto&gt; campaignDtoList = campaignService.getCurrentCampaignsMockedService();</b>
+&nbsp;
+<b class="fc">&nbsp;                if (!CollectionUtils.isEmpty(campaignDtoList)) {</b>
+<b class="fc">&nbsp;                    campaignDtoList.forEach(campaignDto -&gt; {</b>
+<b class="fc">&nbsp;                        if (matchCurrentCampaign(player, campaignDto) &amp;&amp; checkNewCampaignForPlayer(player, campaignDto)) {</b>
+&nbsp;
+<b class="fc">&nbsp;                            campaignService.createCampaignEntity(campaignDto, player).ifPresent(campaign -&gt; {</b>
+<b class="nc">&nbsp;                                player.getCampaigns().add(campaign);</b>
+<b class="nc">&nbsp;                                playerRepository.save(player);</b>
+<b class="nc">&nbsp;                                writeLog(&quot;PlayerService.getPlayerDetails() - player updated with a new campaign: {}&quot;,</b>
+<b class="nc">&nbsp;                                        campaign.getName());</b>
+&nbsp;                            });
+&nbsp;                        }
+&nbsp;                    });
+&nbsp;                }
+<b class="fc">&nbsp;                writeLog(&quot;PlayerService.getPlayerDetails() - player: {}&quot;, player.getIdPlayer());</b>
+<b class="fc">&nbsp;                return Optional.of(player);</b>
+<b class="fc">&nbsp;            } catch (Exception e) {</b>
+<b class="fc">&nbsp;                writeLog(&quot;PlayerService.getPlayerDetails() - failed to retrieve current campaign: {}&quot;,</b>
+<b class="fc">&nbsp;                        e.getMessage());</b>
+<b class="fc">&nbsp;                throw new FindCurrentCampaignException(e.getMessage(), ERROR_CURRENT_CAMPAIGN, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return Optional.empty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @param player
+&nbsp;     * @param campaignDto
+&nbsp;     * @return
+&nbsp;     */
+&nbsp;    public static boolean checkNewCampaignForPlayer(Player player, CampaignDto campaignDto) {
+<b class="fc">&nbsp;        if (!CollectionUtils.isEmpty(player.getCampaigns())) {</b>
+<b class="nc">&nbsp;            return player.getCampaigns()</b>
+<b class="nc">&nbsp;                    .stream()</b>
+<b class="nc">&nbsp;                    .noneMatch(campaign -&gt; campaign.getName().equals(campaignDto.getName()));</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @param player
+&nbsp;     * @param campaign
+&nbsp;     * @return
+&nbsp;     */
+&nbsp;    public static boolean matchCurrentCampaign(Player player, CampaignDto campaign) {
+<b class="fc">&nbsp;        List&lt;BiPredicate&lt;Player, CampaignDto&gt;&gt; matchers = List.of(</b>
+&nbsp;                matchLevel,
+&nbsp;                matchCountry,
+&nbsp;                matchItems,
+&nbsp;                matchDoesNotHaveItems
+&nbsp;                // Add new matchers here
+&nbsp;        );
+&nbsp;
+<b class="fc">&nbsp;        return matchers.stream().allMatch(matcher -&gt; matcher.test(player, campaign));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     *
+&nbsp;     */
+<b class="fc">&nbsp;    private static final BiPredicate&lt;Player, CampaignDto&gt; matchLevel = (player, campaign) -&gt; {</b>
+<b class="fc">&nbsp;        if (null != player.getLevel()) {</b>
+<b class="fc">&nbsp;            int playerLevel = player.getLevel();</b>
+&nbsp;            ;
+<b class="fc">&nbsp;            int minLevel = campaign.getMatchers() != null &amp;&amp; campaign.getMatchers().getLevel() != null ?</b>
+<b class="fc">&nbsp;                    campaign.getMatchers().getLevel().getMin() : Integer.MAX_VALUE;</b>
+<b class="fc">&nbsp;            int maxLevel = campaign.getMatchers() != null &amp;&amp; campaign.getMatchers().getLevel() != null ?</b>
+<b class="fc">&nbsp;                    campaign.getMatchers().getLevel().getMax() : Integer.MIN_VALUE;</b>
+&nbsp;
+<b class="fc">&nbsp;            return playerLevel &gt;= minLevel &amp;&amp; playerLevel &lt;= maxLevel;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return false;</b>
+&nbsp;    };
+&nbsp;
+&nbsp;    /**
+&nbsp;     *
+&nbsp;     */
+<b class="fc">&nbsp;    private static final BiPredicate&lt;Player, CampaignDto&gt; matchCountry = (player, campaign) -&gt; {</b>
+<b class="fc">&nbsp;        if (null != player.getCountry()) {</b>
+<b class="fc">&nbsp;            String playerCountry = player.getCountry();</b>
+<b class="fc">&nbsp;            List&lt;String&gt; campaignCountries = null != campaign.getMatchers() &amp;&amp; null != campaign.getMatchers().getHas() ?</b>
+<b class="fc">&nbsp;                    campaign.getMatchers().getHas().getCountry() : Collections.emptyList();</b>
+&nbsp;
+<b class="fc">&nbsp;            return campaignCountries.contains(playerCountry);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    };
+&nbsp;
+&nbsp;    /**
+&nbsp;     *
+&nbsp;     */
+<b class="fc">&nbsp;    private static final BiPredicate&lt;Player, CampaignDto&gt; matchItems = (player, campaign) -&gt; {</b>
+<b class="fc">&nbsp;        if (null != player.getInventory() &amp;&amp; !CollectionUtils.isEmpty(player.getInventory().getItems())) {</b>
+<b class="fc">&nbsp;            List&lt;Item&gt; playerItems = player.getInventory().getItems();</b>
+<b class="fc">&nbsp;            List&lt;String&gt; campaignItems = null != campaign.getMatchers() &amp;&amp; null != campaign.getMatchers().getHas() ?</b>
+<b class="fc">&nbsp;                    campaign.getMatchers().getHas().getItems() : Collections.emptyList();</b>
+&nbsp;
+<b class="fc">&nbsp;            return playerItems.stream().map(Item::getName).anyMatch(campaignItems::contains);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    };
+&nbsp;
+&nbsp;    /**
+&nbsp;     *
+&nbsp;     */
+<b class="fc">&nbsp;    private static final BiPredicate&lt;Player, CampaignDto&gt; matchDoesNotHaveItems = (player, campaign) -&gt; {</b>
+<b class="fc">&nbsp;        if (null != player.getInventory() &amp;&amp; !CollectionUtils.isEmpty(player.getInventory().getItems())) {</b>
+<b class="fc">&nbsp;            List&lt;Item&gt; playerItems = player.getInventory().getItems();</b>
+<b class="fc">&nbsp;            List&lt;String&gt; campaignDoesNotHaveItems = null != campaign.getMatchers() &amp;&amp; null != campaign.getMatchers().getDoesNotHave() ?</b>
+<b class="fc">&nbsp;                    campaign.getMatchers().getDoesNotHave().getItems() : Collections.emptyList();</b>
+&nbsp;
+<b class="fc">&nbsp;            return playerItems.stream().map(Item::getName).noneMatch(campaignDoesNotHaveItems::contains);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    };
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-01-23 19:53</div>
+</div>
+</body>
+</html>
