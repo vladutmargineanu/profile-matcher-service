@@ -21,11 +21,12 @@ INSERT INTO
     `BIRTHDATE`,
     `GENDER`,
     `INVENTORY`,
+    `CLAN`,
     `CUSTOM_FIELD`
 )
 VALUES
     (
-        unhex(replace('97983be2-98b7-11e7-90cf-082e5f28d836', '-', '')), -- ID_PLAYER
+        UUID_TO_BIN('97983be2-98b7-11e7-90cf-082e5f28d836'), -- ID_PLAYER
         'apple_credential', -- CREDENTIAL
         '2021-01-10 13:37:17.000000', -- CREATED
         '2021-01-23 13:37:17.000000', -- MODIFIED
@@ -42,5 +43,6 @@ VALUES
         '2000-01-10 13:37:17.000000', -- BIRTHDATE
         'male', -- GENDER
         1, -- INVENTORY (assuming the ID_INVENTORY from the INVENTORY table)
+        123456, -- CLAN (assuming an existing ID_CLAN from the CLAN table)
         'mycustom' -- CUSTOM_FIELD
     );

@@ -20,7 +20,7 @@ VALUES
             FROM
                 `matcherapplication`.`device` `D`
         ),
-        unhex(replace('97983be2-98b7-11e7-90cf-082e5f28d836', '-', '')), -- PLAYER (assuming an existing ID_PLAYER from the PLAYER table)
+        UUID_TO_BIN('97983be2-98b7-11e7-90cf-082e5f28d836'), -- PLAYER (assuming an existing ID_PLAYER from the PLAYER table)
         'apple iphone 11', -- MODEL
         'vodafone', -- CARRIER
         '123', -- FIRMWARE

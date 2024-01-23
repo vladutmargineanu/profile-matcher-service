@@ -112,7 +112,9 @@ public class CampaignService extends BaseService {
             campaign.setName(campaignDto.getName());
             campaign.setPriority(campaignDto.getPriority());
             campaign.setEnabled(campaignDto.getEnabled());
-            campaign.getPlayers().add(player);
+            List<Player> players = new ArrayList<>();
+            players.add(player);
+            campaign.setPlayers(players);
             campaignRepository.save(campaign);
 
             writeLog("CampaignService.createCampaignEntity() campaign entity created: {}", campaign);

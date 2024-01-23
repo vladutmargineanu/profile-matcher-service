@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,9 +25,8 @@ public class Clan {
     @Column(name = "NAME")
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "PLAYER", referencedColumnName = "ID_PLAYER")
-    private Player player;
+    @OneToMany(mappedBy = "clan", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    private List<Player> player;
 
     @Column(name = "START_DATE")
     private Timestamp startDate;

@@ -32,9 +32,11 @@ public class PlayerService extends BaseService {
     public Optional<Player> getPlayerDetails(String idPlayer) {
         writeLog("PlayerService.getPlayerDetails() - get player by idPlayer: {}", idPlayer);
 
-        Optional<Player> optionalPlayer = playerRepository.findPlayerByIdPlayer(UUID.fromString(idPlayer));
+        Optional<Player> optionalPlayer = playerRepository.findByIdPlayer(UUID.fromString(idPlayer));
+
         if (optionalPlayer.isPresent()) {
             Player player = optionalPlayer.get();
+            writeLog("PlayerService.getPlayerDetails() - player found: {}", player.getIdPlayer());
 
             try {
                 List<CampaignDto> campaignDtoList = campaignService.getCurrentCampaignsMockedService();

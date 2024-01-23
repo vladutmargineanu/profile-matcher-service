@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 public class PlayerController extends BaseController {
@@ -29,11 +30,11 @@ public class PlayerController extends BaseController {
 
         if (playerOptional.isPresent()) {
             PlayerDto playerDto = playerAssembler.toResource(playerOptional.get());
-            writeLog("PlayerController.getClientConfig() - player found in DB: {}", playerDto);
+            writeLog("PlayerController.getClientConfig() - player found: {}", playerDto);
 
             return ResponseEntity.ok(playerDto);
         } else {
-            writeLog("PlayerController.getClientConfig() - player not found in DB");
+            writeLog("PlayerController.getClientConfig() - player not found");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }

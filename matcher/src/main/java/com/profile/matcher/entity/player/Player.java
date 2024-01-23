@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -23,6 +25,7 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "ID_PLAYER", columnDefinition = "BINARY(16)")
+    @JdbcTypeCode(SqlTypes.BINARY)
     private UUID idPlayer;
 
     @NotNull
@@ -86,8 +89,9 @@ public class Player {
     @JoinColumn(name = "INVENTORY", referencedColumnName = "ID_INVENTORY")
     private Inventory inventory;
 
-    @OneToMany(mappedBy = "player", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    private List<Clan> clan;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name = "CLAN", referencedColumnName = "ID_CLAN")
+    private Clan clan;
 
     @Column(name = "CUSTOM_FIELD")
     private String customField;

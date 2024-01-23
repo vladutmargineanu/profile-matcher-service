@@ -1,11 +1,11 @@
 package com.profile.matcher.dto.player;
 
-import com.profile.matcher.dto.campaign.CampaignDto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,7 +35,7 @@ public class PlayerDto {
 
     private String last_purchase;
 
-    private List<CampaignDto> active_campaigns;
+    private List<String> active_campaigns;
 
     private List<DeviceDto> devices;
 
@@ -53,9 +53,9 @@ public class PlayerDto {
 
     private String gender;
 
-    private InventoryDto inventory;
+    private JSONObject inventory;
 
-    private List<ClanDto> clan;
+    private ClanDto clan;
 
     private String _customField;
 }

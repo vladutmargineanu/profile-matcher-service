@@ -21,8 +21,10 @@ CREATE TABLE `PLAYER` (
                             `BIRTHDATE` TIMESTAMP(6),
                             `GENDER` CHAR(10),
                             `INVENTORY` BIGINT NOT NULL,
+                            `CLAN` BIGINT NOT NULL,
                             `CUSTOM_FIELD` VARCHAR(255),
 
                             PRIMARY KEY (`ID_PLAYER`),
-                            CONSTRAINT `FK_INVENTORY` FOREIGN KEY (`INVENTORY`) REFERENCES `INVENTORY` (`ID_INVENTORY`)
+                            CONSTRAINT `FK_INVENTORY` FOREIGN KEY (`INVENTORY`) REFERENCES `INVENTORY` (`ID_INVENTORY`),
+                            CONSTRAINT `FK_CLAN` FOREIGN KEY (`CLAN`) REFERENCES `CLAN` (`ID_CLAN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
