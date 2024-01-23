@@ -26,8 +26,11 @@ public class CampaignService extends BaseService {
     @Autowired
     private CampaignRepository campaignRepository;
 
+
     /**
-     * @return
+     * Method to retrieve the current campaign from external API
+     *
+     * @return CampaignDto
      */
     public List<CampaignDto> getCurrentCampaignsRealService() {
         writeLog("CampaignService.getCurrentCampaignsRealService() IN");
@@ -56,7 +59,9 @@ public class CampaignService extends BaseService {
     }
 
     /**
-     * @return
+     * Method to retrieve a mocked response for current campaign
+     *
+     * @return CampaignDto
      */
     public List<CampaignDto> getCurrentCampaignsMockedService() {
         writeLog("CampaignService.getCurrentCampaignsMockedService() IN");
@@ -96,9 +101,11 @@ public class CampaignService extends BaseService {
     }
 
     /**
+     * Method used to create a campaign entity
+     *
      * @param campaignDto
      * @param player
-     * @return
+     * @return Optional of campaign
      */
     public Optional<Campaign> createCampaignEntity(CampaignDto campaignDto, Player player) {
         if (null != campaignDto) {

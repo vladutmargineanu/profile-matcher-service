@@ -33,8 +33,10 @@ public class PlayerService extends BaseService {
     private PlayerRepository playerRepository;
 
     /**
+     * Method to retrieve a player with id from database
+     *
      * @param idPlayer
-     * @return
+     * @return Optional of player
      */
     @Transactional(rollbackFor = {Exception.class, UpdatePlayerDetailsException.class}, propagation = Propagation.REQUIRED)
     public Optional<Player> getPlayerDetails(String idPlayer) {
@@ -81,9 +83,11 @@ public class PlayerService extends BaseService {
     }
 
     /**
+     * Method to check if a player is already in the campaign
+     *
      * @param player
      * @param campaignDto
-     * @return
+     * @return boolean
      */
     public static boolean checkNewCampaignForPlayer(Player player, CampaignDto campaignDto) {
         if (!CollectionUtils.isEmpty(player.getCampaigns())) {
@@ -95,6 +99,8 @@ public class PlayerService extends BaseService {
     }
 
     /**
+     * Method to check if a player can be in a campaign
+     *
      * @param player
      * @param campaign
      * @return
@@ -112,7 +118,8 @@ public class PlayerService extends BaseService {
     }
 
     /**
-     *
+     * Implementation of the method test() from functional interface BiPredicate
+     * This predicate check if the user match with his level in the campaign
      */
     private static final BiPredicate<Player, CampaignDto> matchLevel = (player, campaign) -> {
         if (null != player.getLevel()) {
@@ -129,7 +136,8 @@ public class PlayerService extends BaseService {
     };
 
     /**
-     *
+     * Implementation of the method test() from functional interface BiPredicate
+     * This predicate check if the user match with his country in the campaign
      */
     private static final BiPredicate<Player, CampaignDto> matchCountry = (player, campaign) -> {
         if (null != player.getCountry()) {
@@ -143,7 +151,8 @@ public class PlayerService extends BaseService {
     };
 
     /**
-     *
+     * Implementation of the method test() from functional interface BiPredicate
+     * This predicate check if the user has the respective items from campaign
      */
     private static final BiPredicate<Player, CampaignDto> matchItems = (player, campaign) -> {
         if (null != player.getInventory() && !CollectionUtils.isEmpty(player.getInventory().getItems())) {
@@ -157,7 +166,8 @@ public class PlayerService extends BaseService {
     };
 
     /**
-     *
+     * Implementation of the method test() from functional interface BiPredicate
+     * This predicate check if the user has not the respective items from campaign
      */
     private static final BiPredicate<Player, CampaignDto> matchDoesNotHaveItems = (player, campaign) -> {
         if (null != player.getInventory() && !CollectionUtils.isEmpty(player.getInventory().getItems())) {
