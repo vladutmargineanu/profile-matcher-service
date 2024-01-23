@@ -21,6 +21,7 @@ public class DeviceAssembler extends BaseAssembler<Device, DeviceDto> {
             deviceDto.setId(device.getIdDevice());
             deviceDto.setModel(device.getModel());
             deviceDto.setCarrier(device.getCarrier());
+            deviceDto.setFirmware(device.getFirmware());
         }
         return deviceDto;
     }

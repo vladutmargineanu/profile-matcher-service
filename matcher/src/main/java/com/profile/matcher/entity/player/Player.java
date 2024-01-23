@@ -54,7 +54,7 @@ public class Player {
     private Timestamp lastPurchase;
 
     @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+            cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinTable(
             name = "CAMPAIGN_PLAYER",
             joinColumns = @JoinColumn(name = "ID_PLAYER"),

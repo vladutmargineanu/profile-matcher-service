@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -64,7 +62,7 @@ public class CampaignService extends BaseService {
         writeLog("CampaignService.getCurrentCampaignsMockedService() IN");
 
         CampaignDto campaign = new CampaignDto();
-        campaign.setGame("mygame");
+        campaign.setGame("mygame1");
         campaign.setName("mycampaign");
         campaign.setPriority(BigDecimal.valueOf(10.5));
 
@@ -102,7 +100,6 @@ public class CampaignService extends BaseService {
      * @param player
      * @return
      */
-    @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRES_NEW)
     public Optional<Campaign> createCampaignEntity(CampaignDto campaignDto, Player player) {
         if (null != campaignDto) {
             writeLog("CampaignService.createCampaignEntity() entity from dto: {}", campaignDto);
@@ -115,9 +112,8 @@ public class CampaignService extends BaseService {
             List<Player> players = new ArrayList<>();
             players.add(player);
             campaign.setPlayers(players);
-            campaignRepository.save(campaign);
 
-            writeLog("CampaignService.createCampaignEntity() campaign entity created: {}", campaign);
+            writeLog("CampaignService.createCampaignEntity() campaign entity created: {}", campaign.getName());
 
             return Optional.of(campaign);
         }

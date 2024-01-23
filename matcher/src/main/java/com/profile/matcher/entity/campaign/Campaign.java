@@ -40,12 +40,7 @@ public class Campaign {
     @Column(name = "ENABLED")
     private Boolean enabled;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinTable(
-            name = "CAMPAIGN_PLAYER",
-            joinColumns = @JoinColumn(name = "ID_CAMPAIGN"),
-            inverseJoinColumns = @JoinColumn(name = "ID_PLAYER"))
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "campaigns")
     private List<Player> players;
 
     @Column(name = "LAST_UPDATED")

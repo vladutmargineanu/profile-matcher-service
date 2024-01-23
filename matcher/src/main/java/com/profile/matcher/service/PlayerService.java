@@ -33,7 +33,6 @@ public class PlayerService extends BaseService {
         writeLog("PlayerService.getPlayerDetails() - get player by idPlayer: {}", idPlayer);
 
         Optional<Player> optionalPlayer = playerRepository.findByIdPlayer(UUID.fromString(idPlayer));
-
         if (optionalPlayer.isPresent()) {
             Player player = optionalPlayer.get();
             writeLog("PlayerService.getPlayerDetails() - player found: {}", player.getIdPlayer());
@@ -54,7 +53,7 @@ public class PlayerService extends BaseService {
                         }
                     });
                 }
-                writeLog("PlayerService.getPlayerDetails() - player: {}", player);
+                writeLog("PlayerService.getPlayerDetails() - player: {}", player.getIdPlayer());
                 return Optional.of(player);
             } catch (Exception e) {
                 writeLog("PlayerService.getPlayerDetails() - failed to retrieve current campaign: {}",
