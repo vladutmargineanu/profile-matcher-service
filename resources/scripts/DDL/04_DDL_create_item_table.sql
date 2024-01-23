@@ -12,6 +12,5 @@ CREATE TABLE `ITEM` (
                           `END_DATE` TIMESTAMP(6),
 
                           PRIMARY KEY (`ID_ITEM`),
-                          CONSTRAINT `FK_INVENTORY_1` FOREIGN KEY (`INVENTORY`) REFERENCES `INVENTORY` (`ID_INVENTORY`),
-                          UNIQUE KEY `NAME_UNIQUE` (`NAME`)
+                          CONSTRAINT `FK_INVENTORY_1` FOREIGN KEY (`INVENTORY`) REFERENCES `INVENTORY` (`ID_INVENTORY`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
