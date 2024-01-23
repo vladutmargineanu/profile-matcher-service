@@ -1,22 +1,16 @@
 package com.profile.matcher.assembler;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.profile.matcher.arhitecture.BaseAssembler;
 import com.profile.matcher.dto.player.PlayerDto;
 import com.profile.matcher.entity.campaign.Campaign;
-import com.profile.matcher.entity.player.Inventory;
-import com.profile.matcher.entity.player.Item;
 import com.profile.matcher.entity.player.Player;
 import com.profile.matcher.utils.DateHelper;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -24,6 +18,8 @@ public class PlayerAssembler extends BaseAssembler<Player, PlayerDto> {
 
     @Autowired
     private DeviceAssembler deviceAssembler;
+    @Autowired
+    private InventoryAssembler inventoryAssembler;
     @Autowired
     private ClanAssembler clanAssembler;
 
@@ -57,20 +53,7 @@ public class PlayerAssembler extends BaseAssembler<Player, PlayerDto> {
             playerDto.setLanguage(player.getLanguage());
             playerDto.setBirthdate(DateHelper.toFormattedDateTimeString(player.getBirthdate()));
             playerDto.setGender(player.getGender());
-
-            // Set inventory like JSONObject
-            if (null != player.getInventory()) {
-                Inventory inventory = player.getInventory();
-                Map<String, String> map = new HashMap<>();
-                map.put("cash", inventory.getCash().toString());
-                map.put("coins", inventory.getCoins().toString());
-                if (null != inventory.getItems()) {
-                    inventory.getItems().forEach(item -> map.put(item.getName(), item.getQuantity().toString()));
-                }
-                JSONObject inventoryDto = new JSONObject(map);
-                playerDto.setInventory(inventoryDto);
-            }
-
+            playerDto.setInventory(inventoryAssembler.toResource(player.getInventory()));
             playerDto.setClan(clanAssembler.toResource(player.getClan()));
             playerDto.set_customField(player.getCustomField());
         }

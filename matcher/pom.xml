@@ -49,13 +49,6 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- JSONObject -->
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20231013</version>
-		</dependency>
-
 		<!-- Test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

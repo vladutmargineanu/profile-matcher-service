@@ -62,7 +62,7 @@ public class CampaignService extends BaseService {
         writeLog("CampaignService.getCurrentCampaignsMockedService() IN");
 
         CampaignDto campaign = new CampaignDto();
-        campaign.setGame("mygame1");
+        campaign.setGame("mygame");
         campaign.setName("mycampaign");
         campaign.setPriority(BigDecimal.valueOf(10.5));
 
