@@ -35,7 +35,7 @@ public class PlayerService extends BaseService {
     /**
      * Method to retrieve a player with id from database
      * This method also update the retrieved player with the current campaign
-     * If the player satisfy some condition from current campaign
+     * If the player satisfies some condition from current campaign
      *
      *
      * @param idPlayer
