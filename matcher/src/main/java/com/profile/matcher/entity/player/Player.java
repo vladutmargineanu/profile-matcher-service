@@ -17,7 +17,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @Entity
 @Table(name = "PLAYER", schema = "matcherapplication")

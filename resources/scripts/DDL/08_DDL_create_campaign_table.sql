@@ -14,6 +14,5 @@ CREATE TABLE `CAMPAIGN` (
                             `END_DATE` TIMESTAMP(6),
 
                             PRIMARY KEY (`ID_CAMPAIGN`),
-                            UNIQUE KEY `GAME_UNIQUE` (`GAME`),
                             UNIQUE KEY `NAME_UNIQUE` (`NAME`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

@@ -11,7 +11,6 @@ import java.time.Instant;
 
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @Entity
 @Table(name = "DEVICE", schema = "matcherapplication")

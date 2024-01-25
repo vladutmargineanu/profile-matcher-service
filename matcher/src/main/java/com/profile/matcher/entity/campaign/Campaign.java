@@ -15,7 +15,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @Entity
 @Table(name = "CAMPAIGN", schema = "matcherapplication")

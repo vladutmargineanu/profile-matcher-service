@@ -5,6 +5,7 @@ import com.profile.matcher.dto.campaign.CampaignDto;
 import com.profile.matcher.entity.campaign.Campaign;
 import com.profile.matcher.entity.player.Player;
 import com.profile.matcher.repository.CampaignRepository;
+import com.profile.matcher.utils.DateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -94,37 +95,55 @@ public class CampaignService extends BaseService {
         campaign.setEnabled(true);
         campaign.setLast_updated("2021-07-13 11:46:58Z");
         List<CampaignDto> campaignDtoList = Collections.singletonList(campaign);
-
         writeLog("CampaignService.getCurrentCampaignsMockedService() current campaigns: {}", campaignDtoList);
 
         return campaignDtoList;
     }
 
     /**
-     * Method used to create a campaign entity
+     * Method used to create a campaign entity if it does not exist
+     * If the campaign already exist ind db, we update the existing one
      *
      * @param campaignDto
      * @param player
      * @return Optional of campaign
      */
-    public Optional<Campaign> createCampaignEntity(CampaignDto campaignDto, Player player) {
-        if (null != campaignDto) {
-            writeLog("CampaignService.createCampaignEntity() entity from dto: {}", campaignDto);
+    public Optional<Campaign> getCampaignEntity(CampaignDto campaignDto, Player player) {
+        if (null != campaignDto && campaignDto.getEnabled()) {
+            writeLog("CampaignService.getCampaignEntity() entity from dto: {}", campaignDto);
 
-            Campaign campaign = new Campaign();
-            campaign.setGame(campaignDto.getGame());
-            campaign.setName(campaignDto.getName());
-            campaign.setPriority(campaignDto.getPriority());
-            campaign.setEnabled(campaignDto.getEnabled());
-            List<Player> players = new ArrayList<>();
-            players.add(player);
-            campaign.setPlayers(players);
+            Campaign campaign = null;
+            if (null != campaignDto.getName()) {
+                Optional<Campaign> campaignOptional = campaignRepository.findByNameAndEndDateIsNull(campaignDto.getName());
 
-            writeLog("CampaignService.createCampaignEntity() campaign entity created: {}", campaign.getName());
+                if (campaignOptional.isPresent()) {
+                    campaign = campaignOptional.get();
+                    writeLog("CampaignService.getCampaignEntity() campaign already exist in db: {}", campaign.getName());
+                    campaign.getPlayers().add(player);
+                    if (!campaignDto.getLast_updated().equals(DateHelper.toFormattedDateTimeString(campaign.getLastUpdated()))) {
+                        setCampaignProperties(campaignDto, campaign);
+                    }
+                } else {
+                    campaign = new Campaign();
+                    campaign.setName(campaignDto.getName());
+                    List<Player> players = new ArrayList<>();
+                    players.add(player);
+                    campaign.setPlayers(players);
+                    setCampaignProperties(campaignDto, campaign);
+                }
+                writeLog("CampaignService.getCampaignEntity() campaign entity created: {}", campaign.getName());
 
-            return Optional.of(campaign);
+                return Optional.of(campaign);
+            }
         }
 
         return Optional.empty();
+    }
+
+    private static void setCampaignProperties(CampaignDto campaignDto, Campaign campaign) {
+        campaign.setGame(campaignDto.getGame());
+        campaign.setPriority(campaignDto.getPriority());
+        campaign.setEnabled(campaignDto.getEnabled());
+        campaign.setLastUpdated(DateHelper.convertStringToTimestamp(campaignDto.getLast_updated()));
     }
 }

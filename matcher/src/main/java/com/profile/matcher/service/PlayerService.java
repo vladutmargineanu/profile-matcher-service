@@ -34,6 +34,9 @@ public class PlayerService extends BaseService {
 
     /**
      * Method to retrieve a player with id from database
+     * This method also update the retrieved player with the current campaign
+     * If the player satisfy some condition from current campaign
+     *
      *
      * @param idPlayer
      * @return Optional of player
@@ -61,7 +64,7 @@ public class PlayerService extends BaseService {
                     campaignDtoList.forEach(campaignDto -> {
                         if (matchCurrentCampaign(player, campaignDto) && checkNewCampaignForPlayer(player, campaignDto)) {
 
-                            campaignService.createCampaignEntity(campaignDto, player).ifPresent(campaign -> {
+                            campaignService.getCampaignEntity(campaignDto, player).ifPresent(campaign -> {
                                 player.getCampaigns().add(campaign);
                                 playerRepository.save(player);
                                 writeLog("PlayerService.getPlayerDetails() - player updated with a new campaign: {}",

@@ -13,7 +13,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @Entity
 @Table(name = "INVENTORY", schema = "matcherapplication")
