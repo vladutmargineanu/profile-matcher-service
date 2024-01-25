@@ -8,6 +8,12 @@ Profile matcher service
 #### Swagger link local access: http://localhost:8080/swagger-ui/index.html#/
 
 ---
+## Project versions tech
+
+#### Spring Boot 3.2.2
+#### Java SE 17
+
+---
 
 ## Project Structure
 
