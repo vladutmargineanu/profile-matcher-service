@@ -102,7 +102,7 @@ public class CampaignService extends BaseService {
 
     /**
      * Method used to create a campaign entity if it does not exist
-     * If the campaign already exist ind db, we update the existing one
+     * If the campaign already exist in db, we update the existing one
      *
      * @param campaignDto
      * @param player
