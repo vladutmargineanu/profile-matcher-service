@@ -10,7 +10,7 @@ public abstract class BaseCommand<T> extends BaseLogging {
             return doExecute();
         }
 
-        throw new RuntimeException("shouldExecute() returned false");
+        throw new RuntimeException("canExecute() returned false");
     }
 
     protected abstract T doExecute();

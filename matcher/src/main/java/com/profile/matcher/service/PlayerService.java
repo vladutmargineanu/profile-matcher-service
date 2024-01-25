@@ -127,7 +127,6 @@ public class PlayerService extends BaseService {
     private static final BiPredicate<Player, CampaignDto> matchLevel = (player, campaign) -> {
         if (null != player.getLevel()) {
             int playerLevel = player.getLevel();
-            ;
             int minLevel = campaign.getMatchers() != null && campaign.getMatchers().getLevel() != null ?
                     campaign.getMatchers().getLevel().getMin() : Integer.MAX_VALUE;
             int maxLevel = campaign.getMatchers() != null && campaign.getMatchers().getLevel() != null ?

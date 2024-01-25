@@ -20,7 +20,6 @@ public class InventoryDto {
 
     private BigDecimal coins;
 
-    // TODO - format like JSON format string
     private List<Item> item;
 
     private String startDate;
